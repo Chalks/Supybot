@@ -271,11 +271,15 @@ class QuoteGrabs(callbacks.Plugin):
 
         Removes the grab <number> (the last by default) on <channel>.
         <channel> is only necessary if the message isn't sent in the channel
-        itself.
+        itself.  You may only ungrab quotes you made or grabbed.
         """
         try:
-            self.db.remove(channel, grab)
-            irc.replySuccess()
+            original = self.db.get(channel, grab)
+            if ircutils.nickEqual(original.grabber, msg.nick) or ircutils.nickEqual(original.by, msg.nick):
+                self.db.remove(channel, grab)
+                irc.replySuccess()
+            else:
+                irc.error('Can only ungrab quotes made or grabbed by you.')
         except dbi.NoRecordError:
             if grab is None:
                 irc.error('Nothing to ungrab.')
