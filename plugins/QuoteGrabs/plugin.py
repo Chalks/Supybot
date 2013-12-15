@@ -276,11 +276,11 @@ class QuoteGrabs(callbacks.Plugin):
         try:
             original = self.db.get(channel, grab)
             grabber = plugins.getUserName(original.grabber)
-            if ircutils.nickEqual(grabber, msg.nick) or ircutils.nickEqual(original.by, msg.nick):
+            if ircutils.nickEqual(grabber, msg.user) or ircutils.nickEqual(original.by, msg.nick):
                 self.db.remove(channel, grab)
                 irc.replySuccess()
             else:
-                irc.error('Can only ungrab quotes made or grabbed by you.  You (%s) tried to ungrab something grabbed by (%s - %s)' % (msg.nick, grabber, original.grabber))
+                irc.error('Can only ungrab quotes made or grabbed by you.')
         except dbi.NoRecordError:
             if grab is None:
                 irc.error('Nothing to ungrab.')
