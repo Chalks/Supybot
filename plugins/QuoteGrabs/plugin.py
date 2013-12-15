@@ -275,7 +275,7 @@ class QuoteGrabs(callbacks.Plugin):
         """
         try:
             original = self.db.get(channel, grab)
-            if ircutils.nickEqual(ircutils.nickFromHostmask(original.grabber), msg.user) or ircutils.nickEqual(original.by, msg.nick):
+            if ircutils.nickEqual(ircutils.nickFromHostmask(original.grabber), msg.nick) or ircutils.nickEqual(original.by, msg.nick):
                 self.db.remove(channel, grab)
                 irc.replySuccess()
             else:
